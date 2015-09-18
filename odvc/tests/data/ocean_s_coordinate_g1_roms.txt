@@ -1,0 +1,3 @@
+url="http://tds.marine.rutgers.edu/thredds/dodsC/roms/espresso/2013_da/avg/ESPRESSO_Real-Time_v2_Averages_Best"
+
+ncks -F --dimension time,1 --variable s_rho,Cs_r,zeta,h,hc $url ocean_s_coordinate_g1_roms.nc
