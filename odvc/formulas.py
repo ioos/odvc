@@ -67,8 +67,8 @@ def ocean_s_coordinate_g1(s, eta, depth, depth_c, c):
         S(k,j,i) = depth_c * s(k) + (depth(j,i) - depth_c) * C(k)
 
     """
-    S = depth_c * s + (depth - depth_c) * c
-    return S + eta * (1 + S / depth)
+    S = (depth_c * s) + ((depth - depth_c) * c)
+    return eta * (S / depth + 1) + S
 
 
 def ocean_s_coordinate_g2(s, eta, depth, depth_c, c):

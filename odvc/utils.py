@@ -18,7 +18,8 @@ def get_formula_terms_variables(nc):
     `formula_terms` attribute.
 
     """
-    func = lambda v: v is not None
+    def func(v):
+        return v is not None
     var = nc.get_variables_by_attributes(formula_terms=func)
     if not var:
         msg = ("Could not find the attribute `formula_terms` in any of the "
