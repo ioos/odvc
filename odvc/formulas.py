@@ -1,19 +1,36 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import (absolute_import, division, print_function)
+
 import numpy as np
+
+__all__ = ['ocean_double_sigma_coordinate',
+           'ocean_sigma_z_coordinate',
+           'ocean_sigma_coordinate',
+           'ocean_s_coordinate',
+           'ocean_s_coordinate_g1',
+           'ocean_s_coordinate_g2']
 
 
 def ocean_double_sigma_coordinate(sigma, depth, z1, z2, a, href, k_c):
+    """
+    Creates a dimensioned version of ocean double sigma.
+
+    """
     raise NotImplemented
 
 
 def ocean_sigma_z_coordinate():
+    """
+    Creates a dimensioned version of ocean sigma over z.
+
+    """
     raise NotImplemented
 
 
 def ocean_sigma_coordinate(sigma, eta, depth):
     """
-    Creates an ocean sigma coordinate factory with the formula:
+    Creates a dimensioned version of ocean sigma coordinate.
 
     z(n, k, j, i) = eta(n, j, i) + sigma(k) *
                     (depth(j, i) + eta(n, j, i))
@@ -24,7 +41,7 @@ def ocean_sigma_coordinate(sigma, eta, depth):
 
 def ocean_s_coordinate(s, eta, depth, a, b, depth_c):
     """
-    Creates an Ocean s-coordinate factory with the formula:
+    Creates a dimensioned version of ocean s-coordinate.
 
     z(n,k,j,i) = eta(n,j,i)*(1+s(k)) + depth_c*s(k) +
                     (depth(j,i)-depth_c)*C(k)
@@ -41,7 +58,7 @@ def ocean_s_coordinate(s, eta, depth, a, b, depth_c):
 
 def ocean_s_coordinate_g1(s, eta, depth, depth_c, c):
     """
-    Creates an Ocean s-coordinate, generic form 1 factory with the formula:
+    Creates a dimensioned version of ocean s-coordinate generic form 1.
 
     z(n,k,j,i) = S(k,j,i) + eta(n,j,i) * (1 + S(k,j,i) / depth(j,i))
 
@@ -55,7 +72,7 @@ def ocean_s_coordinate_g1(s, eta, depth, depth_c, c):
 
 def ocean_s_coordinate_g2(s, eta, depth, depth_c, c):
     """
-    Creates an Ocean s-coordinate, generic form 2 factory with the formula:
+    Creates a dimensioned version of s-coordinate generic form 2.
 
     z(n,k,j,i) = eta(n,j,i) + (eta(n,j,i) + depth(j,i)) * S(k,j,i)
 
