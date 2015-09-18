@@ -3,6 +3,14 @@
 import numpy as np
 
 
+def ocean_double_sigma_coordinate(sigma, depth, z1, z2, a, href, k_c):
+    raise NotImplemented
+
+
+def ocean_sigma_z_coordinate():
+    raise NotImplemented
+
+
 def ocean_sigma_coordinate(sigma, eta, depth):
     """
     Creates an ocean sigma coordinate factory with the formula:
@@ -12,42 +20,6 @@ def ocean_sigma_coordinate(sigma, eta, depth):
 
     """
     return eta + sigma * (depth + eta)
-
-
-def ocean_double_sigma_coordinate(sigma, depth, z1, z2, a, href, k_c):
-    raise NotImplemented
-
-
-def ocean_sigma_z_coordinate(sigma, eta, depth, depth_c, nsigma, zlev,
-                             shape, nsigma_slice):
-    """
-    Creates a ocean sigma over z coordinate factory with the formula:
-
-    if k < nsigma:
-    z(n, k, j, i) = eta(n, j, i) + sigma(k) *
-                        (min(depth_c, depth(j, i)) + eta(n, j, i))
-
-    if k >= nsigma:
-    z(n, k, j, i) = zlev(k)
-
-    The `zlev` and 'nsigma' coordinates must be provided, and at least
-    either `eta`, or 'sigma' and `depth` and `depth_c` coordinates.
-
-    """
-    # Perform the ocean sigma over z coordinate nsigma slice.
-    if eta.ndim:
-        eta = eta[nsigma_slice]
-    if sigma.ndim:
-        sigma = sigma[nsigma_slice]
-    if depth.ndim:
-        depth = depth[nsigma_slice]
-    # Note that, this performs a point-wise minimum.
-    temp = eta + sigma * (np.minimum(depth_c, depth) + eta)
-    # Calculate the final derived result.
-    result = np.ones(shape, dtype=temp.dtype) * zlev
-    result[nsigma_slice] = temp
-
-    return result
 
 
 def ocean_s_coordinate(s, eta, depth, a, b, depth_c):
