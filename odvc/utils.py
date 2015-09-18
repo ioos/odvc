@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
 import netCDF4
 from biggus import NumpyArrayAdapter
@@ -18,7 +19,12 @@ def get_formula_terms_variables(nc):
 
     """
     func = lambda v: v is not None
-    return nc.get_variables_by_attributes(formula_terms=func)
+    var = nc.get_variables_by_attributes(formula_terms=func)
+    if not var:
+        msg = ("Could not find the attribute `formula_terms` in any of the "
+               "{!r} variables.").format
+        raise ValueError(msg(nc))
+    return var
 
 
 def get_formula_terms(var):
