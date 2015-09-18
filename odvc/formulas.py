@@ -57,7 +57,7 @@ def ocean_s_coordinate(s, eta, depth, a, b, depth_c):
     return eta * (1 + s) + depth_c * s + (depth - depth_c) * c
 
 
-def ocean_s_coordinate_g1(s, eta, depth, depth_c, c):
+def ocean_s_coordinate_g1(s, c, eta, depth, depth_c):
     """
     Creates a dimensioned version of ocean s-coordinate generic form 1.
 
