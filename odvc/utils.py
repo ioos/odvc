@@ -8,9 +8,26 @@ import netCDF4
 from biggus import NumpyArrayAdapter
 
 
-__all__ = ['get_formula_terms_variables',
-           'get_formula_terms',
+__all__ = ['get_formula_terms',
+           'get_formula_terms_variables',
+           'get_formula_terms_dims',
            'nc2biggus']
+
+
+def get_formula_terms(var):
+    """
+    Return a `formula_terms` dict mapping var_names to variables.
+    The input can be a netCDF variable (`var`) holding the `formula_terms`
+    attribute or the attribute itself.
+
+    """
+    formula_terms = OrderedDict()
+    if isinstance(var, netCDF4.Variable):
+        var = var.formula_terms
+    terms = [x.strip(':') for x in var.split()]
+    for k, v in zip(terms[::2], terms[1::2]):
+        formula_terms.update({k: v})
+    return formula_terms
 
 
 def get_formula_terms_variables(nc):
@@ -29,20 +46,16 @@ def get_formula_terms_variables(nc):
     return var
 
 
-def get_formula_terms(var):
+def get_formula_terms_dims(nc, formula_terms):
     """
-    Return a `formula_terms` dict mapping var_names to variables.
-    The input can be a netCDF variable (`var`) holding the `formula_terms`
-    attribute or the attribute itself.
+    Returns an OrderedDict object `dims` holding the `formula_terms` dimensions
+    listed in the netCDF4-python object `nc`
 
     """
-    formula_terms = OrderedDict()
-    if isinstance(var, netCDF4.Variable):
-        var = var.formula_terms
-    terms = [x.strip(':') for x in var.split()]
-    for k, v in zip(terms[::2], terms[1::2]):
-        formula_terms.update({k: v})
-    return formula_terms
+    dims = OrderedDict()
+    for k, v in formula_terms.items():
+        dims.update({k: nc[v].dimensions})
+    return dims
 
 
 def nc2biggus(nc, formula_terms):
