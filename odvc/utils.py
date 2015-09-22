@@ -58,6 +58,23 @@ def get_formula_terms_dims(nc, formula_terms):
     return dims
 
 
+def get_z_dims(dims):
+    """
+    Returns the vertical coordinate final dimensions (`final_dims`) based on
+    the combined dimensions of the formula_terms `dims`.
+
+    """
+    all_dims = (dims.get('eta'), dims.get('depth'),
+                dims.get('sigma'), dims.get('s'))
+    all_dims = _filter_none(all_dims)
+    all_dims = _flatten(all_dims)
+    all_dims = _remove_duplicate(all_dims)
+    if len(all_dims) > 1:
+        final_dims = all_dims[:]
+        final_dims.insert(1, final_dims.pop(-1))
+    return final_dims
+
+
 def nc2biggus(nc, formula_terms):
     """
     Create `biggus.NumpyArrayAdapter` arrays for the variables
@@ -86,3 +103,17 @@ def nc2biggus(nc, formula_terms):
             raise ValueError('Cannot deal with {} dimensions'.format(var.ndim))
         arrays.update({term: var})
     return arrays
+
+
+def _filter_none(seq):
+    return [x for x in seq if x is not None]
+
+
+def _flatten(seq):
+    return [item for sublista in seq for item in sublista]
+
+
+def _remove_duplicate(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
