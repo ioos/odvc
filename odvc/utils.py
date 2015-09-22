@@ -3,6 +3,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+from collections import OrderedDict
 import netCDF4
 from biggus import NumpyArrayAdapter
 
@@ -35,10 +36,13 @@ def get_formula_terms(var):
     attribute or the attribute itself.
 
     """
+    formula_terms = OrderedDict()
     if isinstance(var, netCDF4.Variable):
         var = var.formula_terms
     terms = [x.strip(':') for x in var.split()]
-    return {k: v for k, v in zip(terms[::2], terms[1::2])}
+    for k, v in zip(terms[::2], terms[1::2]):
+        formula_terms.update({k: v})
+    return formula_terms
 
 
 def nc2biggus(nc, formula_terms):
