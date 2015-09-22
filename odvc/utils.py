@@ -11,6 +11,7 @@ from biggus import NumpyArrayAdapter
 __all__ = ['get_formula_terms',
            'get_formula_terms_variables',
            'get_formula_terms_dims',
+           'get_z_dims',
            'nc2biggus']
 
 
