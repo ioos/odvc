@@ -4,15 +4,17 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 from collections import OrderedDict
+
 import netCDF4
-from biggus import NumpyArrayAdapter
+import dask.array as da
 
 
 __all__ = ['get_formula_terms',
            'get_formula_terms_variables',
            'get_formula_terms_dims',
-           'get_z_dims',
-           'nc2biggus']
+           'z_shape',
+           'reshape',
+           'prepare_arrays']
 
 
 def get_formula_terms(var):
@@ -59,9 +61,9 @@ def get_formula_terms_dims(nc, formula_terms):
     return dims
 
 
-def get_z_dims(dims):
+def z_shape(nc, dims):
     """
-    Returns the vertical coordinate final dimensions (`final_dims`) based on
+    Returns the vertical coordinate `shape` based on
     the combined dimensions of the formula_terms `dims`.
 
     """
@@ -71,38 +73,51 @@ def get_z_dims(dims):
     all_dims = _flatten(all_dims)
     all_dims = _remove_duplicate(all_dims)
     if len(all_dims) > 1:
-        final_dims = all_dims[:]
-        final_dims.insert(1, final_dims.pop(-1))
-    return final_dims
+        z_dims = all_dims[:]
+        z_dims.insert(1, z_dims.pop(-1))
+
+    shape = []
+    for dim in z_dims:
+        try:
+            shape.append(len(nc.dimensions.get(dim)))
+        except TypeError:
+            msg = "Could not get dimension size for dim {!r}".format
+            raise ValueError(msg(dim))
+
+    return tuple(shape)
 
 
-def nc2biggus(nc, formula_terms):
-    """
-    Create `biggus.NumpyArrayAdapter` arrays for the variables
-    listed in `formula_terms`.
+def reshape(arr, new_shape):
+    shape = arr.shape
+    dims = [k for k in shape]
+    slicer = slice(None, None, None)
 
-    CAVEAT: There are a few assumptions here that might not hold everywhere.
-    1) `eta` is the only 3D variable time x 2D space.
-    2) 2D variables (e.g.: depth) are defined in a 2D space.
-    3) 1D variables are defined in 1D vertical space.
-    4) 0D variables are just parameters.
-    5) There are no >4D variables.
+    def select(dim):
+        return slicer if dim in dims else None
 
-    """
+    keys = tuple(select(k) for k in new_shape)
+
+    return arr.__getitem__(keys)
+
+
+def prepare_arrays(nc, formula_terms, new_shape):
     arrays = dict()
     for term, var in formula_terms.items():
         var = nc[var]
         if var.ndim == 0:
-            var = var[:]
-        elif var.ndim == 1:
-            var = NumpyArrayAdapter(var)[None, :, None, None]
-        elif var.ndim == 2:
-            var = NumpyArrayAdapter(var)[None, None, ...]
-        elif var.ndim == 3:
-            var = NumpyArrayAdapter(var)[:, None, ...]
+            arr = var[:]
         else:
-            raise ValueError('Cannot deal with {} dimensions'.format(var.ndim))
-        arrays.update({term: var})
+            if var.ndim > 2:
+                chunks = (1,) + var.shape[1:]
+            else:
+                chunks = var.shape
+            if term == 'sigma' and var.ndim == 2:
+                chunks = var.shape
+            if term == 'eta' and var.ndim == 2:
+                chunks = (1,) + var.shape[1:]
+            arr = da.from_array(var, chunks=chunks)
+            arr = reshape(arr, new_shape)
+        arrays.update({term: arr})
     return arrays
 
 
