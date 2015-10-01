@@ -7,6 +7,9 @@ from collections import OrderedDict
 
 import netCDF4
 import dask.array as da
+import dask
+from dask.async import get_sync
+dask.set_options(get=get_sync)
 
 
 __all__ = ['get_formula_terms',
