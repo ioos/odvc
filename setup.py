@@ -50,4 +50,5 @@ setup(
     install_requires=install_requires,
     tests_require=['pytest'],
     packages=['odvc'],
+    cmdclass=versioneer.get_cmdclass(),
 )
