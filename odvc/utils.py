@@ -7,7 +7,7 @@ from collections import OrderedDict
 import dask
 import dask.array as da
 
-from dask.async import get_sync
+from dask.local import get_sync
 
 import netCDF4
 
