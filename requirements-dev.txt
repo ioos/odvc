@@ -1,8 +1,15 @@
+black
 flake8-builtins
 flake8-comprehensions
-flake8-import-order
 flake8-mutable
 flake8-print
-flake8-quotes
+isort
+nbsphinx
 pycodestyle
+pylint
 pytest
+pytest-flake8
+pytest-xdist
+sphinx
+twine
+wheel
