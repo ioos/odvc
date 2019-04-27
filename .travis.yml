@@ -1,56 +1,42 @@
-language: python
+language: minimal
 
 sudo: false
-
-cache:
-  directories:
-    - $HOME/miniconda
-
-# Removing the directory will remove the env but leave the cached packages
-# at $HOME/miniconda/pkgs. That is a win-win because when re-creating the
-# env we will download only the new packages.
-before_cache:
-  - rm -rf $HOME/miniconda/envs/TEST
 
 matrix:
   fast_finish: true
   include:
-  - python: 2.7
-    env: TEST_TARGET=default
-  - python: 3.6
-    env: TEST_TARGET=default
-  - python: 3.5
-    env: TEST_TARGET=default
-  - python: 3.6
-    env: TEST_TARGET=coding_standards
+  - name: python-3.6
+    env: TEST_TARGET=default PY=3.6
+  - name: python-3.7
+    env: TEST_TARGET=default PY=3.7
+  - name: coding_standards
+    env: PY=3.7
+  - name: docs
+    env: PY=3.7
 
 before_install:
+  # Install miniconda and create TEST env.
   - |
-    echo ""
-    if [ ! -f $HOME/miniconda/bin/conda ] ; then
-      echo "Fresh miniconda installation."
-      wget http://bit.ly/miniconda -O miniconda.sh
-      rm -rf $HOME/miniconda
-      bash miniconda.sh -b -p $HOME/miniconda
-    fi
-
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
-  - conda update conda
-  - conda config --add channels conda-forge --force
-  - conda create -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
-  - source activate TEST
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    bash miniconda.sh -b -p $HOME/miniconda
+    export PATH="$HOME/miniconda/bin:$PATH"
+    conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
+    conda update conda --quiet
+    conda config --add channels conda-forge --force
+    conda config --set channel_priority strict
+    conda config --set safety_checks disabled
+    conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
+    source activate TEST
 
 install:
-  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install odvc-${version}.tar.gz && popd
+  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install --no-deps --force-reinstall odvc-${version}.tar.gz && popd
 
 script:
   - if [[ $TEST_TARGET == 'default' ]]; then
-      py.test -s -rxs -v test;
+      cp -r tests/ /tmp ;
+      pushd /tmp && pytest -n 2 -rxs tests && popd ;
     fi
 
-  - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-      flake8 odvc --max-line-length=100 --exclude _version.py ;
-      flake8 test --max-line-length=100 ;
+  - if [[ $TRAVIS_JOB_NAME == 'coding_standards' ]]; then
+      pytest --flake8 -m flake8 ;
     fi
-
