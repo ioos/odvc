@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 import os
 import unittest
 
@@ -35,9 +33,7 @@ class UtilTests(unittest.TestCase):
         self.formula_terms = get_formula_terms(self.formula_terms_variable)
         self.dims = get_formula_terms_dims(self.nc, self.formula_terms)
         self.new_shape = z_shape(self.nc, self.dims)
-        self.arrays = prepare_arrays(
-            self.nc, self.formula_terms, self.new_shape
-        )
+        self.arrays = prepare_arrays(self.nc, self.formula_terms, self.new_shape)
 
     def tearDown(self):
         self.nc.close()
@@ -52,10 +48,7 @@ class UtilTests(unittest.TestCase):
     def test_formula_terms_variables(self):
         assert len(self.formula_terms_variables) == 1
         assert hasattr(self.formula_terms_variable, "formula_terms")
-        assert (
-            self.formula_terms_variable.standard_name
-            == "ocean_s_coordinate_g1"
-        )
+        assert self.formula_terms_variable.standard_name == "ocean_s_coordinate_g1"
 
     def test_formula_terms_isstr(self):
         for k, v in self.formula_terms.items():

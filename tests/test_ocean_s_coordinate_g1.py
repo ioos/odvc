@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 import os
 import unittest
 
@@ -90,6 +88,6 @@ class OceanSCoordinateG1(unittest.TestCase):
                 -15.50607592,
                 -8.88076055,
                 -3.15458049,
-            ]
+            ],
         )
         np.testing.assert_allclose(self.sliced.compute(), z_comp)
