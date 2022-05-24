@@ -6,7 +6,7 @@ import netCDF4
 import numpy as np
 import pytest
 
-from odvc.utils import (
+from odvc.parse_formula_terms import (
     get_formula_terms,
     get_formula_terms_dims,
     get_formula_terms_variables,

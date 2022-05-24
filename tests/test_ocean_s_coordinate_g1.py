@@ -8,7 +8,7 @@ import numpy as np
 from netCDF4 import Dataset
 
 from odvc import ocean_s_coordinate_g1
-from odvc.utils import (
+from odvc.parse_formula_terms import (
     get_formula_terms,
     get_formula_terms_dims,
     get_formula_terms_variables,
