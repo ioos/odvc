@@ -1,8 +1,4 @@
-odvc
-------
-
-.. image:: https://travis-ci.org/ioos/odvc.svg?branch=master
-    :target: https://travis-ci.org/ioos/odvc
+# odvc
 
 Ocean Dimensionless Vertical Coordinates
 

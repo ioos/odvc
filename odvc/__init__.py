@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = "unknown"
 
-from __future__ import absolute_import, division, print_function
-
-from ._version import get_versions
 from .formulas import (
     ocean_double_sigma_coordinate,
     ocean_s_coordinate,
@@ -11,9 +11,6 @@ from .formulas import (
     ocean_sigma_coordinate,
     ocean_sigma_z_coordinate,
 )
-
-__version__ = get_versions()["version"]
-del get_versions
 
 __all__ = [
     "ocean_double_sigma_coordinate",
