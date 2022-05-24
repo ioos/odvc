@@ -1,3 +1,5 @@
+"""Ocean Dimensionless Vertical Coordinates."""
+
 try:
     from ._version import __version__
 except ImportError:

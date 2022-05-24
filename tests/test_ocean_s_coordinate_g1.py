@@ -1,3 +1,5 @@
+"""Test ocean_s_coordinate_g1"""
+
 import os
 import unittest
 
