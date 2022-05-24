@@ -19,9 +19,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-      # Should be enough for setuptools-scm
-      fetch-depth: 100
-      persist-credentials: false
+        # Should be enough for setuptools-scm
+        fetch-depth: 100
+        persist-credentials: false
 
     - name: Get tags
       run: git fetch origin 'refs/tags/*:refs/tags/*'

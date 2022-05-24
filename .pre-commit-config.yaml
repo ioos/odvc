@@ -68,16 +68,11 @@ repos:
   hooks:
     - id: add-trailing-comma
 
-- repo: https://github.com/deathbeds/prenotebook
-  rev: f5bdb72a400f1a56fe88109936c83aa12cc349fa
+- repo: https://github.com/pycqa/pydocstyle
+  rev: 6.1.1
   hooks:
-    - id: prenotebook
-
--   repo: https://github.com/pycqa/pydocstyle
-    rev: 6.1.1
-    hooks:
-      - id: pydocstyle
-        exclude: ^(docs|setup.py)
+    - id: pydocstyle
+      exclude: ^(docs|setup.py)
 
 ci:
     autofix_commit_msg: |
