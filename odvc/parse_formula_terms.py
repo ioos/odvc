@@ -47,7 +47,7 @@ def get_formula_terms_dims(nc, formula_terms):
 
 
 def z_shape(nc, dims):
-    """Return the vertical coordinate `shape` based on the combined dimensions of the formula_terms `dims`."""
+    """Return the vertical coordinate `shape` based on the formula_terms `dims`."""
     all_dims = (
         dims.get("eta"),
         dims.get("depth"),
