@@ -1,6 +1,14 @@
 name: Publish to PyPI
 
-on: ["push", "pull_request"]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
+
 
 defaults:
   run:
@@ -15,7 +23,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.x
+        python-version: "3.x"
 
     - name: Get tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
@@ -23,7 +31,7 @@ jobs:
 
     - name: Install build tools
       run: |
-        python -m pip install --upgrade pip wheel setuptools setuptools_scm build twine
+        python -m pip install --upgrade pip build
 
     - name: Build binary wheel
       run: python -m build --sdist --wheel . --outdir dist
@@ -35,11 +43,12 @@ jobs:
     - name: Test wheels
       run: |
         cd dist && python -m pip install odvc*.whl
+        python -m pip install --upgrade pip twine
         python -m twine check *
 
     - name: Publish a Python distribution to PyPI
       if: success() && github.event_name == 'release'
-      uses: pypa/gh-action-pypi-publish@v1.8.6
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_PASSWORD }}
