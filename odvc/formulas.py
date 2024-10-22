@@ -4,8 +4,7 @@ import numpy as np
 
 
 def ocean_double_sigma_coordinate(sigma, depth, z1, z2, a, href, k_c):
-    """
-    Create a dimensioned version of ocean double sigma.
+    """Create a dimensioned version of ocean double sigma.
 
     Definition:
       for k <= k_c
@@ -25,30 +24,28 @@ def ocean_double_sigma_coordinate(sigma, depth, z1, z2, a, href, k_c):
 
 
 def ocean_sigma_z_coordinate(sigma, eta, depth, depth_c, nsigma, zlev):
-    """
-    Create a dimensioned version of ocean sigma over z.
+    """Create a dimensioned version of ocean sigma over z.
 
     Definition:
-        for k <= nsigma
-            z(n,k,j,i) = eta(n,j,i) + sigma(k)*(min(depth_c,depth(j,i))+eta(n,j,i))
-        for k > nsigma
-            z(n,k,j,i) = zlev(k)
+      for k <= nsigma
+        z(n,k,j,i) = eta(n,j,i) + sigma(k)*(min(depth_c,depth(j,i))+eta(n,j,i))
+      for k > nsigma
+        z(n,k,j,i) = zlev(k)
 
-        where z(n,k,j,i) is height, positive upwards, relative to ocean datum
-        (e.g. mean sea level) at gridpoint (n,k,j,i) , eta(n,j,i) is the height
-        of the ocean surface, positive upwards, relative to ocean datum at
-        gridpoint (n,j,i) , sigma(k) is the dimensionless coordinate at
-        vertical gridpoint (k) for k <= nsigma , and depth(j,i) is the distance
-        from ocean datum to sea floor (positive value) at horizontal
-        gridpoint (j,i) . Above depth depth_c there are nsigma layers.
+      where z(n,k,j,i) is height, positive upwards, relative to ocean datum
+      (e.g. mean sea level) at gridpoint (n,k,j,i) , eta(n,j,i) is the height
+      of the ocean surface, positive upwards, relative to ocean datum at
+      gridpoint (n,j,i) , sigma(k) is the dimensionless coordinate at
+      vertical gridpoint (k) for k <= nsigma , and depth(j,i) is the distance
+      from ocean datum to sea floor (positive value) at horizontal
+      gridpoint (j,i) . Above depth depth_c there are nsigma layers.
 
     """
     raise NotImplementedError
 
 
 def ocean_sigma_coordinate(sigma, eta, depth):
-    """
-    Create a dimensioned version of ocean sigma coordinate.
+    """Create a dimensioned version of ocean sigma coordinate.
 
     z(n, k, j, i) = eta(n, j, i) + sigma(k) *
                     (depth(j, i) + eta(n, j, i))
@@ -58,8 +55,7 @@ def ocean_sigma_coordinate(sigma, eta, depth):
 
 
 def ocean_s_coordinate(s, eta, depth, a, b, depth_c):
-    """
-    Create a dimensioned version of ocean s-coordinate.
+    """Create a dimensioned version of ocean s-coordinate.
 
     z(n,k,j,i) = eta(n,j,i)*(1+s(k)) + depth_c*s(k) +
                     (depth(j,i)-depth_c)*C(k)
@@ -76,8 +72,7 @@ def ocean_s_coordinate(s, eta, depth, a, b, depth_c):
 
 
 def ocean_s_coordinate_g1(s, c, eta, depth, depth_c):
-    """
-    Create a dimensioned version of ocean s-coordinate generic form 1.
+    """Create a dimensioned version of ocean s-coordinate generic form 1.
 
     z(n,k,j,i) = S(k,j,i) + eta(n,j,i) * (1 + S(k,j,i) / depth(j,i))
 
@@ -90,8 +85,7 @@ def ocean_s_coordinate_g1(s, c, eta, depth, depth_c):
 
 
 def ocean_s_coordinate_g2(s, eta, depth, depth_c, c):
-    """
-    Create a dimensioned version of s-coordinate generic form 2.
+    """Create a dimensioned version of s-coordinate generic form 2.
 
     z(n,k,j,i) = eta(n,j,i) + (eta(n,j,i) + depth(j,i)) * S(k,j,i)
 
