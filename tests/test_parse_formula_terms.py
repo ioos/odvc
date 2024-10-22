@@ -40,8 +40,10 @@ def setup():
 def test_formula_terms_variables(setup):
     """Assert that the formula_terms_variables are correctly identified."""
     assert hasattr(setup["formula_terms_variable"], "formula_terms")
-    assert setup["formula_terms_variable"].standard_name == "ocean_s_coordinate_g1"
-    for k, v in setup["formula_terms"].items():
+    assert (
+        setup["formula_terms_variable"].standard_name == "ocean_s_coordinate_g1"
+    )
+    for v in setup["formula_terms"].values():
         assert isinstance(v, str)
 
 
@@ -58,7 +60,7 @@ def test_get_formula_terms_and_dims(setup):
 
 def test_arrays(setup):
     """Assert that the arrays are the right obj instance."""
-    for k, v in setup["arrays"].items():
+    for v in setup["arrays"].values():
         if hasattr(v, "compute"):
             assert isinstance(v, da.Array)
             assert isinstance(v.compute(), np.ndarray)
@@ -69,6 +71,7 @@ def test_arrays(setup):
 def test_no_formula_terms_variables():
     """Test if it will fail as expected when formula terms are missing."""
     no_formula_term = "no_formula_terms.nc"
-    with Dataset(data_path.joinpath(no_formula_term)) as nc:
-        with pytest.raises(ValueError):
-            get_formula_terms_variables(nc)
+    fname = data_path.joinpath(no_formula_term)
+    match = "Could not find the attribute `formula_terms`"
+    with Dataset(fname) as nc, pytest.raises(ValueError, match=match):
+        get_formula_terms_variables(nc)

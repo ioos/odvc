@@ -6,8 +6,7 @@ import netCDF4
 
 
 def get_formula_terms(var):
-    """
-    Return a `formula_terms` dict mapping var_names to variables.
+    """Return a `formula_terms` dict mapping var_names to variables.
 
     The input can be a netCDF variable (`var`) holding the `formula_terms`
     attribute or the attribute itself.
@@ -39,7 +38,9 @@ def get_formula_terms_variables(nc):
 
 
 def get_formula_terms_dims(nc, formula_terms):
-    """Return an OrderedDict object `dims` holding the `formula_terms` dimensions."""
+    """Return an OrderedDict object `dims` holding the
+    `formula_terms` dimensions.
+    """
     dims = OrderedDict()
     for k, v in formula_terms.items():
         dims.update({k: nc[v].dimensions})
@@ -47,7 +48,9 @@ def get_formula_terms_dims(nc, formula_terms):
 
 
 def z_shape(nc, dims):
-    """Return the vertical coordinate `shape` based on the formula_terms `dims`."""
+    """Return the vertical coordinate `shape` based on the
+    `formula_terms` `dims`.
+    """
     all_dims = (
         dims.get("eta"),
         dims.get("depth"),
@@ -61,13 +64,11 @@ def z_shape(nc, dims):
         z_dims = all_dims[:]
         z_dims.insert(1, z_dims.pop(-1))
 
-    shape = []
-    for dim in z_dims:
-        try:
-            shape.append(len(nc.dimensions.get(dim)))
-        except TypeError:
-            msg = "Could not get dimension size for dim {!r}".format
-            raise ValueError(msg(dim))
+    try:
+        shape = [len(nc.dimensions.get(dim)) for dim in z_dims]
+    except TypeError as err:
+        msg = "Could not get dimension size"
+        raise ValueError(msg) from err
 
     return tuple(shape)
 
@@ -75,7 +76,7 @@ def z_shape(nc, dims):
 def _reshape(arr, new_shape):
     """Reshape arrays according to the expected dimensions."""
     shape = arr.shape
-    dims = [k for k in shape]
+    dims = list(shape)
     slicer = slice(None, None, None)
 
     def select(dim):
@@ -92,19 +93,16 @@ def prepare_arrays(nc, formula_terms, new_shape):
 
     arrays = {}
     for term, var in formula_terms.items():
-        var = nc[var]
-        if var.ndim == 0:
-            arr = var[:]
+        _var = nc[var]
+        if _var.ndim == 0:
+            arr = _var[:]
         else:
-            if var.ndim > 2:
-                chunks = (1,) + var.shape[1:]
-            else:
-                chunks = var.shape
-            if term == "sigma" and var.ndim == 2:
-                chunks = var.shape
-            if term == "eta" and var.ndim == 2:
-                chunks = (1,) + var.shape[1:]
-            arr = da.from_array(var, chunks=chunks)
+            chunks = (1,) + _var.shape[1:] if _var.ndim > 2 else _var.shape
+            if term == "sigma" and _var.ndim == 2:
+                chunks = _var.shape
+            if term == "eta" and _var.ndim == 2:
+                chunks = (1,) + _var.shape[1:]
+            arr = da.from_array(_var, chunks=chunks)
             arr = _reshape(arr, new_shape)
         arrays.update({term: arr})
     return arrays
