@@ -40,7 +40,9 @@ def setup():
 def test_formula_terms_variables(setup):
     """Assert that the formula_terms_variables are correctly identified."""
     assert hasattr(setup["formula_terms_variable"], "formula_terms")
-    assert setup["formula_terms_variable"].standard_name == "ocean_s_coordinate_g1"
+    assert (
+        setup["formula_terms_variable"].standard_name == "ocean_s_coordinate_g1"
+    )
     for k, v in setup["formula_terms"].items():
         assert isinstance(v, str)
 
