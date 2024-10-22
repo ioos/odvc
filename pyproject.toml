@@ -1,6 +1,7 @@
 [build-system]
-requires = ["setuptools>=41.2", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
+
+requires = [ "setuptools>=41.2", "setuptools-scm" ]
 
 [project]
 name = "odvc"
@@ -16,6 +17,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 dynamic = [
   "dependencies",
@@ -73,7 +75,7 @@ ignore-semiprivate = false
 ignore-private = false
 ignore-module = false
 fail-under = 85
-exclude = ["setup.py", "docs", "tests"]
+exclude = [ "docs", "tests" ]
 verbose = 1
 quiet = false
 color = true
