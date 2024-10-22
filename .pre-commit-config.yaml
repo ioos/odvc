@@ -13,26 +13,6 @@ repos:
     - id: file-contents-sorter
       files: requirements-dev.txt
 
-- repo: https://github.com/PyCQA/flake8
-  rev: 7.1.1
-  hooks:
-    - id: flake8
-      exclude: docs/source/conf.py
-      args: [--max-line-length=105]
-
-- repo: https://github.com/pycqa/isort
-  rev: 5.13.2
-  hooks:
-    - id: isort
-      additional_dependencies: [toml]
-      args: ["--profile", "black", "--filter-files"]
-
-- repo: https://github.com/psf/black
-  rev: 24.10.0
-  hooks:
-  - id: black
-    language_version: python3
-
 - repo: https://github.com/keewis/blackdoc
   rev: v0.3.9
   hooks:
@@ -56,23 +36,39 @@ repos:
       args:
         - --quiet-level=2
 
-- repo: https://github.com/asottile/pyupgrade
-  rev: v3.19.0
-  hooks:
-    - id: pyupgrade
-      args:
-        - --py36-plus
-
 - repo: https://github.com/asottile/add-trailing-comma
   rev: v3.1.0
   hooks:
     - id: add-trailing-comma
 
-- repo: https://github.com/pycqa/pydocstyle
-  rev: 6.3.0
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.7.0
   hooks:
-    - id: pydocstyle
-      exclude: ^(docs|setup.py)
+    - id: ruff
+      args: ["--fix", "--show-fixes"]
+    - id: ruff-format
+
+- repo: https://github.com/nbQA-dev/nbQA
+  rev: 1.8.7
+  hooks:
+    - id: nbqa-check-ast
+    - id: nbqa-black
+    - id: nbqa-ruff
+      args: [
+        --fix,
+        --config=ruff.toml,
+        ]
+
+- repo: https://github.com/bdice/nb-strip-paths
+  rev: v0.1.0
+  hooks:
+    - id: nb-strip-paths
+
+- repo: https://github.com/tox-dev/pyproject-fmt
+  rev: 2.4.3
+  hooks:
+    - id: pyproject-fmt
 
 ci:
     autofix_commit_msg: |
