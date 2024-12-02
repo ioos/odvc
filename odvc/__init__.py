@@ -16,9 +16,9 @@ from .formulas import (
 
 __all__ = [
     "ocean_double_sigma_coordinate",
-    "ocean_sigma_z_coordinate",
-    "ocean_sigma_coordinate",
     "ocean_s_coordinate",
     "ocean_s_coordinate_g1",
     "ocean_s_coordinate_g2",
+    "ocean_sigma_coordinate",
+    "ocean_sigma_z_coordinate",
 ]
