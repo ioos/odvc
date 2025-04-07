@@ -16,7 +16,7 @@ def get_formula_terms(var):
     if isinstance(var, netCDF4.Variable):
         var = var.formula_terms
     terms = [x.strip(":") for x in var.split()]
-    for k, v in zip(terms[::2], terms[1::2]):
+    for k, v in zip(terms[::2], terms[1::2], strict=False):
         formula_terms.update({k: v})
     return formula_terms
 
