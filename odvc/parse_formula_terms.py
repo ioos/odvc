@@ -89,7 +89,7 @@ def _reshape(arr, new_shape):
 
 def prepare_arrays(nc, formula_terms, new_shape):
     """Prepare arrays for formulas."""
-    import dask.array as da
+    import dask.array as da  # noqa: PLC0415
 
     arrays = {}
     for term, var in formula_terms.items():
@@ -97,11 +97,11 @@ def prepare_arrays(nc, formula_terms, new_shape):
         if _var.ndim == 0:
             arr = _var[:]
         else:
-            chunks = (1,) + _var.shape[1:] if _var.ndim > 2 else _var.shape
+            chunks = (1, *_var.shape[1:]) if _var.ndim > 2 else _var.shape
             if term == "sigma" and _var.ndim == 2:
                 chunks = _var.shape
             if term == "eta" and _var.ndim == 2:
-                chunks = (1,) + _var.shape[1:]
+                chunks = (1, *_var.shape[1:])
             arr = da.from_array(_var, chunks=chunks)
             arr = _reshape(arr, new_shape)
         arrays.update({term: arr})
