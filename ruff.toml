@@ -4,12 +4,14 @@ lint.select = ["ALL"]
 
 lint.ignore = [
   "ANN",  # No type check
+  "CPY001",  # Missing copyright notice at top of file
   "D203",  # 1 blank line required before class docstring
   "D205",  # 1 blank line required between summary line and description
   "D213",  # incompatible. Ignoring `multi-line-summary-second-line`
   "ISC001",  # single-line-implicit-string-concatenation
   "N806",  # Variable in function should be lowercase
   "PLR0913",  # Too many arguments in function definition
+  "PLR0917",  # Too many positional arguments
   "PLR2004",  # Magic value used in comparison, consider replacing with a constant variable
   "TRY003",  # Avoid specifying long messages outside the exception class
 ]
